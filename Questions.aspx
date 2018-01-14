@@ -189,6 +189,62 @@
         });
     });
 </script>
+    <script src ="annyang.min.js"></script>
+<script>
+    if (true) {
+        var commands = {
+            "goto *tag":function(tag)
+            {
+                annyang.trigger("go to " + tag);
+            }
+            ,"go to *tag": function (tag) {
+                var text = tag;
+                var elms;
+                elms = document.getElementsByClassName("opts");
+                if (elms == undefined || elms == null)
+                    elms = document.getElementsByClassName("Opts");
+                for (i = 0; i < elms.length; i++) {
+                    /*alert(elms[i].innerText.toLowerCase() + ";" + text.toLowerCase());
+                    alert(elms[i].innerText.toLowerCase()=="questions");
+                    alert(text.toLowerCase()=="questions");*/
+                    if (elms[i].innerText.toLowerCase() == text.toLowerCase()) {
+                        elms[i].getElementsByTagName("a")[0].click();
+                    }
+                    else if (elms[i].innerText.toLowerCase() == text.toLowerCase() + "s") {
+                        elms[i].getElementsByTagName("a")[0].click();
+                    }
+                }
+                console.log(text);
+            }, "search *tag": function (tag) {
+                var parts = tag.split(" ");
+                var text = "";
+                for (i = 0; i < parts.length; i++) {
+                    text += parts[i];
+                    if (i != parts.length - 1)
+                        text += "+";
+                }
+                alert(parts[0]);
+                var b;
+                if (parts.length > 1)
+                    b = true;
+               if(!b)
+                    window.location = "https://www.google.co.il/search?rlz=1C1CHWA_enIL648IL648&q=" + text;
+                else 
+                    window.location = "https://www.google.co.il/search?rlz=1C1CHWA_enIL648IL648&q=" + text+"oq="+parts[0];
+            }, "submit": function () {
+                document.getElementsByTagName("input")[1].click();
+            }, "hi": function () {
+                responsiveVoice.speak("hello");
+            }, "filter *tag": function (tag) {
+                document.getElementById("txt").value = tag;
+            }, "*tag": function (tag) {
+                console.log(tag);
+            }
+        };
+        annyang.addCommands(commands);
+        annyang.start();
+    }
+</script>
     <script>
     var rec = new webkitSpeechRecognition();
     rec.onresult = function (event) {
@@ -210,7 +266,7 @@
         }
         console.log(text);
     }
-    setTimeout(function () { alert("speak now"); rec.start(); }, 200);
+    //setTimeout(function () { alert("speak now"); rec.start(); }, 200);
     var rc = new webkitSpeechRecognition();
     rc.onresult = function (event) {
         var text = event.results[0][0]["transcript"];
