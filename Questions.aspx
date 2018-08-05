@@ -54,7 +54,7 @@
         }
         public void options(bool connected)
         {
-            string st1=String.Format("<a href='HomePage.aspx' >Home Page</a>");
+            string st1=String.Format("<a href='HomePage.aspx' >HomePage</a>");
             string st2=String.Format("<a href='asking.aspx' >Ask a question</a>");
             string st3 = String.Format("<a href='users.aspx'>Users</a>");
             string st4 = String.Format("<a href='addTag.aspx'>add a tag</a>");
@@ -245,38 +245,85 @@
         annyang.start();
     }
 </script>
-    <script>
-    var rec = new webkitSpeechRecognition();
+    <script src ="annyang.min.js"></script>
+<script>
+    if (true) {
+        var commands = {
+            "goto *tag": function (tag) {
+                annyang.trigger("go to " + tag);
+            }
+            , "go to *tag": function (tag) {
+                var text = tag;
+                var elms;
+                elms = document.getElementsByClassName("opts");
+                if (elms == undefined || elms == null)
+                    elms = document.getElementsByClassName("Opts");
+                for (i = 0; i < elms.length; i++) {
+                    /*alert(elms[i].innerText.toLowerCase() + ";" + text.toLowerCase());
+                    alert(elms[i].innerText.toLowerCase()=="questions");
+                    alert(text.toLowerCase()=="questions");*/
+                    if (elms[i].innerText.toLowerCase() == text.toLowerCase()) {
+                        elms[i].getElementsByTagName("a")[0].click();
+                    }
+                    else if (elms[i].innerText.toLowerCase() == text.toLowerCase() + "s") {
+                        elms[i].getElementsByTagName("a")[0].click();
+                    }
+                }
+                console.log(text);
+            }, "search *tag": function (tag) {
+                var parts = tag.split(" ");
+                var text = "";
+                for (i = 0; i < parts.length; i++) {
+                    text += parts[i];
+                    if (i != parts.length - 1)
+                        text += "+";
+                }
+                alert(parts[0]);
+                var b;
+                if (parts.length > 1)
+                    b = true;
+                if (!b)
+                    window.location = "https://www.google.co.il/search?rlz=1C1CHWA_enIL648IL648&q=" + text;
+                else
+                    window.location = "https://www.google.co.il/search?rlz=1C1CHWA_enIL648IL648&q=" + text + "oq=" + parts[0];
+            }
+            , "hi": function () {
+                responsiveVoice.speak("hello");
+            }
+            , "*tag": function (tag) {
+                console.log(tag);
+            }
+        };
+        annyang.addCommands(commands);
+        annyang.start();
+    }
+</script>
+<script>
+  /*  var rec = new webkitSpeechRecognition();
     rec.onresult = function (event) {
         var text = event.results[0][0]["transcript"];
         var elms;
         elms = document.getElementsByClassName("opts");
-        if (elms == undefined || elms == null)
+        if(elms==undefined||elms==null)
             elms = document.getElementsByClassName("Opts");
-        for (i = 0; i < elms.length; i++) {
+        for(i=0;i<elms.length;i++)
+        {
             /*alert(elms[i].innerText.toLowerCase() + ";" + text.toLowerCase());
             alert(elms[i].innerText.toLowerCase()=="questions");
-            alert(text.toLowerCase()=="questions");*/
-            if (elms[i].innerText.toLowerCase() == text.toLowerCase()) {
+            alert(text.toLowerCase()=="questions");
+            if(elms[i].innerText.toLowerCase()==text.toLowerCase())
+            {
                 elms[i].getElementsByTagName("a")[0].click();
             }
-            else if (elms[i].innerText.toLowerCase() == text.toLowerCase() + "s") {
+            else if(elms[i].innerText.toLowerCase()==text.toLowerCase()+"s")
+            {
                 elms[i].getElementsByTagName("a")[0].click();
             }
         }
         console.log(text);
     }
-    //setTimeout(function () { alert("speak now"); rec.start(); }, 200);
-    var rc = new webkitSpeechRecognition();
-    rc.onresult = function (event) {
-        var text = event.results[0][0]["transcript"];
-        document.getElementById("txt").value = text;
-        console.log(text);
-    };
-    function speak()
-    {
-        rc.start();
-    }
+    setTimeout(function () { alert("speak now");rec.start(); }, 3500);
+    */
 </script>
 </body>
 </html>
